@@ -3,11 +3,19 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
+  User,
 } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../firebase';
 
-const AuthContext = createContext();
+const defaultValue = {
+  currentUser: null,
+  signInWithFacebook: null,
+  signInWithGoogle: null,
+  signOut: null,
+};
+
+const AuthContext = createContext(defaultValue);
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -16,7 +24,7 @@ const facebookAuthProvider = new FacebookAuthProvider();
 const googleAuthProvider = new GoogleAuthProvider();
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<User>();
 
   const signInWithFacebook = () => signInWithPopup(auth, facebookAuthProvider);
   const signInWithGoogle = () => signInWithPopup(auth, googleAuthProvider);

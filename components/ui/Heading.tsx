@@ -1,4 +1,9 @@
-const Heading = ({ children, uppercase }) => {
+type HeadingProps = {
+  children: string;
+  uppercase?: boolean;
+};
+
+const Heading = ({ children, uppercase }: HeadingProps) => {
   const styles = ['py-4', 'text-xl', 'font-bold', 'text-center'];
 
   if (uppercase) styles.push('uppercase');

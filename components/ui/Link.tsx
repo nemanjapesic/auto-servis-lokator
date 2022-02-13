@@ -1,6 +1,11 @@
 import NextLink from 'next/link';
 
-const Link = ({ children, href }) => {
+type LinkProps = {
+  children: string;
+  href: string;
+};
+
+const Link = ({ children, href }: LinkProps) => {
   return (
     <NextLink href={href}>
       <a>{children}</a>
