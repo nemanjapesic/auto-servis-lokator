@@ -1,5 +1,5 @@
 type ButtonProps = {
-  children: string;
+  children: string | JSX.Element;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
@@ -40,7 +40,7 @@ const Button = ({
   return (
     <button className={classNames} onClick={onClick} type={type} disabled={disabled}>
       <span className="flex justify-center items-center">
-        {icon && <span className="mr-2 inline-flex items-center">{icon}</span>}
+        {icon && <span className="mr-2">{icon}</span>}
         {children}
       </span>
     </button>

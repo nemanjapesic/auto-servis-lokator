@@ -1,5 +1,5 @@
 type TextProps = {
-  children: string;
+  children: string | JSX.Element | (string | JSX.Element)[];
   light?: boolean;
   small?: boolean;
   large?: boolean;
@@ -9,7 +9,7 @@ type TextProps = {
 };
 
 const Text = ({ children, light, small, large, center, bold, uppercase }: TextProps) => {
-  const styles = [];
+  const styles = ['my-1'];
 
   if (light) styles.push('text-white');
   if (small) styles.push('text-sm');
