@@ -49,7 +49,7 @@ const Alert = ({ message, type }: AlertProps) => {
 
   return (
     <div className={classNames}>
-      {icon && <span className="mr-2 inline-flex">{icon}</span>}
+      {icon && <span className="mr-2">{icon}</span>}
       {message}
     </div>
   );

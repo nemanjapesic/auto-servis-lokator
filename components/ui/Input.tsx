@@ -5,10 +5,20 @@ type InputProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
   placeholder?: string;
+  required?: boolean;
   fullWidth?: boolean;
 };
 
-const Input = ({ type, name, value, onChange, label, placeholder, fullWidth }: InputProps) => {
+const Input = ({
+  type,
+  name,
+  value,
+  onChange,
+  label,
+  placeholder,
+  required,
+  fullWidth,
+}: InputProps) => {
   const styles = ['my-1', 'px-4', 'py-2', 'rounded', 'shadow', 'border'];
 
   if (fullWidth) styles.push('w-full');
@@ -25,6 +35,7 @@ const Input = ({ type, name, value, onChange, label, placeholder, fullWidth }: I
           name={name}
           value={value}
           placeholder={placeholder}
+          required={required}
           onChange={onChange}
         />
       </label>

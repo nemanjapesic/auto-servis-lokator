@@ -1,6 +1,6 @@
 type ButtonProps = {
   children: string | JSX.Element;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   light?: boolean;
@@ -27,7 +27,7 @@ const Button = ({
   const bgColor = light ? 'bg-white' : 'bg-gradient-to-b from-blue-500 to-blue-700';
 
   if (disabled) {
-    styles.push('bg-gray-200', 'text-gray-400');
+    styles.push('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
   } else {
     styles.push(bgColor, textColor);
   }
