@@ -26,11 +26,11 @@ const googleAuthProvider = new GoogleAuthProvider();
 
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<User>();
+  const [currentUser, setCurrentUser] = useState<User>(null);
 
   const signInWithFacebook = () => signInWithPopup(auth, facebookAuthProvider);
   const signInWithGoogle = () => signInWithPopup(auth, googleAuthProvider);
-  const signOut = () => auth.signOut();
+  const signOut = () => auth.signOut().then(() => setCurrentUser(null));
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

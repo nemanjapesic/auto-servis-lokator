@@ -1,9 +1,9 @@
 type ListProps = {
-  children: JSX.Element[];
+  children: JSX.Element | JSX.Element[];
 };
 
 const List = ({ children }: ListProps) => {
-  const styles = ['shadow'];
+  const styles = ['bg-white', 'shadow'];
 
   const classNames = styles.join(' ');
 

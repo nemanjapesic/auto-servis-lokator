@@ -99,7 +99,7 @@ const Auth = () => {
           <Heading uppercase>Odjavi se</Heading>
           <div>
             <Button fullWidth icon={<FaSignOutAlt />} onClick={handleSignOut}>
-              Sign Out
+              Odjavi se
             </Button>
           </div>
         </>

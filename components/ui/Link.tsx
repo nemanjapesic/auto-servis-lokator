@@ -1,14 +1,16 @@
 import NextLink from 'next/link';
 
 type LinkProps = {
-  children: string;
+  children: string | JSX.Element;
   href: string;
+  fullWidth?: boolean;
   underline?: boolean;
 };
 
-const Link = ({ children, href, underline }: LinkProps) => {
-  const styles = [''];
+const Link = ({ children, href, fullWidth, underline }: LinkProps) => {
+  const styles = ['inline-block'];
 
+  if (fullWidth) styles.push('w-full');
   if (underline) styles.push('underline');
 
   const classNames = styles.join(' ');
