@@ -39,7 +39,7 @@ const Button = ({
 
   return (
     <button className={classNames} onClick={onClick} type={type} disabled={disabled}>
-      <span className="flex justify-center items-center">
+      <span className="flex items-center justify-center">
         {icon && <span className="mr-2">{icon}</span>}
         {children}
       </span>

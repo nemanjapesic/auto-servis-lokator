@@ -26,10 +26,10 @@ const Modal = ({ children, show, onClose }: ModalProps) => {
 
   const modalContent = show ? (
     <div
-      className="absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-black bg-opacity-75"
+      className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-black bg-opacity-75"
       onClick={handleClose}
     >
-      <div className="max-w-screen-md w-full p-6 bg-white rounded" onClick={stopEventPropagation}>
+      <div className="w-full max-w-screen-md rounded bg-white p-6" onClick={stopEventPropagation}>
         <header className="flex justify-end">
           <button className="text-2xl" onClick={handleClose}>
             <FaTimes />
