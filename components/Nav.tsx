@@ -16,7 +16,6 @@ const authLinks = [
   { text: 'Moj auto', href: '/my-car' },
   { text: 'Omiljene lokacije', href: '/favorites' },
   { text: 'Preporuči auto servis', href: '/recommend' },
-  { text: 'Odjavi se', href: '/auth' },
 ];
 
 type NavProps = {
@@ -24,9 +23,18 @@ type NavProps = {
 };
 
 const Nav = ({ open }: NavProps) => {
-  const { currentUser } = useAuth();
+  const { currentUser, signOut } = useAuth();
 
   const links = currentUser ? authLinks : defaultLinks;
+
+  const handleSignOut = async () => {
+    console.log('Sign out');
+    try {
+      await signOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <nav
@@ -56,6 +64,13 @@ const Nav = ({ open }: NavProps) => {
               </Link>
             </ListItem>
           ))}
+          {currentUser && (
+            <ListItem>
+              <span className="inline-block w-full cursor-pointer" onClick={handleSignOut}>
+                Odjavi se
+              </span>
+            </ListItem>
+          )}
         </>
       </List>
     </nav>
