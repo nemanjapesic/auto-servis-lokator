@@ -24,7 +24,7 @@ const Header = () => {
 
   return (
     <header className="relative">
-      <div className="relative z-10 flex justify-between bg-gradient-to-b from-blue-500 to-blue-700 px-4 py-2 shadow">
+      <div className="relative z-10 flex flex-initial justify-between bg-gradient-to-b from-blue-500 to-blue-700 px-4 py-2 shadow">
         <Brand />
         {currentUser ? (
           <AvatarMenuIconButton user={currentUser} onClick={toggleMenu} menuIconRef={menuIconRef} />
