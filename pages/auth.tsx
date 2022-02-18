@@ -49,7 +49,7 @@ const Auth = () => {
   if (isLoading) return null;
 
   return (
-    <div className="mx-auto flex flex-col items-center">
+    <div className="flex flex-col items-center p-2">
       <Heading uppercase>Prijavi se</Heading>
       {alert && <Alert type={alert.type} message={alert.message} />}
       <div>

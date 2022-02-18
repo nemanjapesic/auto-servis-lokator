@@ -1,44 +1,46 @@
 type InputProps = {
-  type: string;
   name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  register: any;
   label?: string;
   placeholder?: string;
-  required?: boolean;
+  validationRules?: any;
+  error?: any;
+  type?: string;
   fullWidth?: boolean;
 };
 
 const Input = ({
-  type,
   name,
-  value,
-  onChange,
+  register,
   label,
   placeholder,
-  required,
+  validationRules,
+  error,
+  type,
   fullWidth,
 }: InputProps) => {
-  const styles = ['my-1', 'px-4', 'py-2', 'rounded', 'shadow', 'border'];
+  const styles = ['peer', 'my-1', 'px-4', 'py-2', 'rounded', 'shadow', 'border'];
 
   if (fullWidth) styles.push('w-full');
+  if (error) styles.push('border-red-500');
 
   const classNames = styles.join(' ');
 
   return (
-    <div className="my-2">
-      <label>
-        <p>{label}</p>
-        <input
-          className={classNames}
-          type={type}
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          required={required}
-          onChange={onChange}
-        />
+    <div className="relative my-2">
+      <input
+        className={classNames}
+        type={type}
+        {...register(name, validationRules)}
+        placeholder={placeholder}
+      />
+      <label
+        htmlFor={name}
+        className="absolute -top-1.5 left-2 bg-white px-1 text-sm opacity-100 transition-all peer-placeholder-shown:opacity-0"
+      >
+        {label}
       </label>
+      <p className="text-xs leading-3 text-red-500">{error?.message}&nbsp;</p>
     </div>
   );
 };

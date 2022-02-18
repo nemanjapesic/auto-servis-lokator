@@ -28,7 +28,6 @@ const Nav = ({ open }: NavProps) => {
   const links = currentUser ? authLinks : defaultLinks;
 
   const handleSignOut = async () => {
-    console.log('Sign out');
     try {
       await signOut();
     } catch (error) {
@@ -38,7 +37,7 @@ const Nav = ({ open }: NavProps) => {
 
   return (
     <nav
-      className={`absolute top-full left-0 right-0 transition duration-300 ${
+      className={`absolute top-full left-0 right-0 z-10 transition duration-300 ${
         open ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
