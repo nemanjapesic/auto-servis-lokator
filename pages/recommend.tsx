@@ -1,64 +1,44 @@
-import { addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Button from '../components/ui/Button';
 import Heading from '../components/ui/Heading';
 import Input from '../components/ui/Input';
+import Link from '../components/ui/Link';
 import Text from '../components/ui/Text';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
+import { baseRequiredValidationRules } from '../util/helpers/validation.helpers';
 
 const formFields = [
   {
-    name: 'userEmail',
-    label: 'Email',
-    validationRules: {
-      required: 'Ovo polje je obavezno',
-      maxLength: { value: 20, message: 'Unos mora biti kraći od 20 karaktera' },
-      pattern: {
-        value: /^\S+@\S+\.\S+$/,
-        message: 'Unesite ispravnu email adresu',
-      },
-    },
+    name: 'name',
+    label: 'Ime',
+    validationRules: baseRequiredValidationRules,
   },
   {
-    name: 'userMessage',
-    label: 'Poruka',
+    name: 'address',
+    label: 'Adresa',
+    validationRules: baseRequiredValidationRules,
+  },
+  {
+    name: 'phone',
+    label: 'Telefon',
+    validationRules: baseRequiredValidationRules,
+  },
+  {
+    name: 'comment',
+    label: 'Komentar',
     validationRules: {
       maxLength: { value: 100, message: 'Unos mora biti kraći od 100 karaktera' },
-    },
-  },
-  {
-    name: 'businessName',
-    label: 'Naziv',
-    validationRules: {
-      required: 'Ovo polje je obavezno',
-      minLength: { value: 5, message: 'Unos mora biti duži od 5 karaktera' },
-      maxLength: { value: 50, message: 'Unos mora biti kraći od 50 karaktera' },
-    },
-  },
-  {
-    name: 'businessAddress',
-    label: 'Adresa',
-    validationRules: {
-      required: 'Ovo polje je obavezno',
-      minLength: { value: 5, message: 'Unos mora biti duži od 5 karaktera' },
-      maxLength: { value: 50, message: 'Unos mora biti kraći od 50 karaktera' },
-    },
-  },
-  {
-    name: 'businessPhone',
-    label: 'Telefon',
-    validationRules: {
-      required: 'Ovo polje je obavezno',
-      minLength: { value: 5, message: 'Unos mora biti duži od 5 karaktera' },
-      maxLength: { value: 50, message: 'Unos mora biti kraći od 50 karaktera' },
     },
   },
 ];
 
 const Recommend = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, isLoading } = useAuth();
+  const router = useRouter();
 
   const {
     register,
@@ -79,56 +59,52 @@ const Recommend = () => {
         createdAt: serverTimestamp(),
       });
 
-      toast.success('Recommendation added!');
+      toast.success('Vaša preporuka je dodata!');
+      router.push('/');
     } catch (error) {
       console.log(error);
     }
   };
 
+  if (isLoading) return null;
+
   return (
     <div className="mx-auto p-2">
       <Heading uppercase>Preporuči auto servis</Heading>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {!currentUser && (
+      {!currentUser ? (
+        <div className="text-center">
+          <Text>Morate biti prijavljeni da biste nastavili.</Text>
+          <Link href="/auth">
+            <Button light uppercase>
+              Prijavi se
+            </Button>
+          </Link>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <Text small uppercase>
-              Vaši podaci
+              Podaci o auto servisu
             </Text>
-            {formFields.slice(0, 2).map(({ name, label, validationRules }) => (
+            {formFields.map(({ name, label, validationRules }) => (
               <Input
                 key={name}
                 name={name}
                 register={register}
                 label={label}
                 placeholder={label}
+                multiline={name === 'comment'}
                 fullWidth
                 validationRules={validationRules}
                 error={errors[name]}
               />
             ))}
           </div>
-        )}
-        <div>
-          <Text small uppercase>
-            Podaci o auto servisu
-          </Text>
-          {formFields.slice(2).map(({ name, label, validationRules }) => (
-            <Input
-              key={name}
-              name={name}
-              register={register}
-              label={label}
-              placeholder={label}
-              fullWidth
-              validationRules={validationRules}
-              error={errors[name]}
-            />
-          ))}
-        </div>
-        <Button type="submit" fullWidth disabled={isSubmitting}>
-          Preporuči
-        </Button>
-      </form>
+          <Button type="submit" fullWidth disabled={isSubmitting}>
+            Preporuči
+          </Button>
+        </form>
+      )}
     </div>
   );
 };
