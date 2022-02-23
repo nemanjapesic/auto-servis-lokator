@@ -14,6 +14,7 @@ function MyApp({ Component, pageProps }) {
           name="description"
           content="Auto Servis Lokator - Pronađite najbolje auto servise u vašoj okolini."
         />
+        <link rel="icon" href="/logo.svg" />
       </Head>
       <Layout>
         <Component {...pageProps} />
