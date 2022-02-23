@@ -1,11 +1,10 @@
-import Image from 'next/image';
 import Link from './ui/Link';
 
 const Brand = () => {
   return (
     <Link href="/">
       <div className="flex items-center space-x-3">
-        <Image src="/logo.svg" alt="Auto Servis Lokator Logo" width="45" height="48" />
+        <img src="/logo.svg" alt="Auto Servis Lokator Logo" width="45px" height="48px" />
         <div className="font-bold uppercase text-white">
           <div className="tracking-wider">Auto Servis</div>
           <div className="text-2xl leading-none">Lokator</div>

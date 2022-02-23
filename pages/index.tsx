@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div className="flex-auto bg-gradient-to-b from-blue-500 to-blue-700 p-2 text-center">
       <div className="flex justify-center pt-6">
-        <img src="/logo.svg" alt="Auto Servis Lokator Logo" width="96" height="104" />
+        <img src="/logo.svg" alt="Auto Servis Lokator Logo" width="96px" height="104px" />
       </div>
       <Heading light uppercase>
         Dobro Došli!

@@ -8,7 +8,7 @@ type MenuIconButtonProps = {
 
 const MenuIconButton = ({ open, onClick, menuIconRef }: MenuIconButtonProps) => {
   return (
-    <button className="text-3xl text-white" onClick={onClick} ref={menuIconRef}>
+    <button className="text-3xl text-white" onClick={onClick} ref={menuIconRef} aria-label="menu">
       <HiDotsVertical className={`transition duration-300 ${open ? 'rotate-180' : 'rotate-0'}`} />
     </button>
   );

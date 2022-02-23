@@ -22,7 +22,13 @@ const Avatar = ({ user, large = false }: AvatarProps) => {
       } flex items-center justify-center rounded-full border-2 text-2xl font-bold text-white`}
     >
       {user.photoURL ? (
-        <img className="w-16 rounded-full" src={profilePictureUrl} alt={user.displayName} />
+        <img
+          className="w-16 rounded-full"
+          src={profilePictureUrl}
+          alt={user.displayName}
+          width="64px"
+          height="64px"
+        />
       ) : (
         <span className={`${large ? 'text-blue-500' : 'text-white'}`}>{user.displayName[0]}</span>
       )}
