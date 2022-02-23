@@ -1,4 +1,5 @@
 import NextLink from 'next/link';
+import { cx } from '../../util/helpers/classNames.helpers';
 
 type LinkProps = {
   children: string | JSX.Element;
@@ -8,12 +9,7 @@ type LinkProps = {
 };
 
 const Link = ({ children, href, fullWidth, underline }: LinkProps) => {
-  const styles = ['inline-block'];
-
-  if (fullWidth) styles.push('w-full');
-  if (underline) styles.push('underline');
-
-  const classNames = styles.join(' ');
+  const classNames = cx('inline-block', fullWidth && 'w-full', underline && 'underline');
 
   return (
     <NextLink href={href}>

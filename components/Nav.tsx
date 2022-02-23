@@ -1,4 +1,5 @@
 import { useAuth } from '../context/AuthContext';
+import { cx } from '../util/helpers/classNames.helpers';
 import Avatar from './Avatar';
 import Link from './ui/Link';
 import List from './ui/List';
@@ -37,9 +38,10 @@ const Nav = ({ open }: NavProps) => {
 
   return (
     <nav
-      className={`absolute top-full left-0 right-0 z-10 transition duration-300 ${
+      className={cx(
+        'absolute top-full left-0 right-0 z-10 transition duration-300',
         open ? 'translate-y-0' : '-translate-y-full'
-      }`}
+      )}
     >
       <List>
         <>

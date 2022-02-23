@@ -1,3 +1,5 @@
+import { cx } from '../../util/helpers/classNames.helpers';
+
 type SelectProps = {
   children: JSX.Element[];
   value: string;
@@ -8,11 +10,7 @@ type SelectProps = {
 };
 
 const Select = ({ children, value, onChange, label, placeholder, fullWidth }: SelectProps) => {
-  const styles = ['my-1', 'px-4', 'py-2', 'rounded', 'shadow', 'border'];
-
-  if (fullWidth) styles.push('w-full');
-
-  const classNames = styles.join(' ');
+  const classNames = cx('my-1 rounded border px-4 py-2 shadow', fullWidth && 'w-full');
 
   return (
     <div className="my-2">

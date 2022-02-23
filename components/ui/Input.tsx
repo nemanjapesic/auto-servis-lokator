@@ -1,3 +1,5 @@
+import { cx } from '../../util/helpers/classNames.helpers';
+
 type InputProps = {
   name: string;
   register: any;
@@ -21,19 +23,19 @@ const Input = ({
   multiline,
   fullWidth,
 }: InputProps) => {
-  const styles = ['peer', 'my-1', 'px-4', 'py-2', 'rounded', 'shadow', 'border'];
-
-  if (fullWidth) styles.push('w-full');
-  if (error) styles.push('border-red-500');
-
-  const classNames = styles.join(' ');
+  const classNames = cx(
+    'peer py-2 my-1 rounded border px-4 shadow',
+    fullWidth && 'w-full',
+    error && 'border-red-500'
+  );
 
   return (
     <div
-      className={`relative my-2 ${
+      className={cx(
+        'relative my-2',
         validationRules?.required &&
-        "after:absolute after:top-0 after:right-0 after:mr-1 after:mt-1 after:text-red-500 after:content-['*']"
-      }`}
+          "after:absolute after:top-0 after:right-0 after:mr-1 after:mt-1 after:text-red-500 after:content-['*']"
+      )}
     >
       {multiline ? (
         <textarea

@@ -1,3 +1,5 @@
+import { cx } from '../../util/helpers/classNames.helpers';
+
 type HeadingProps = {
   children: string;
   light?: boolean;
@@ -5,12 +7,11 @@ type HeadingProps = {
 };
 
 const Heading = ({ children, light, uppercase }: HeadingProps) => {
-  const styles = ['py-4', 'text-xl', 'font-bold', 'text-center'];
-
-  if (light) styles.push('text-white');
-  if (uppercase) styles.push('uppercase');
-
-  const classNames = styles.join(' ');
+  const classNames = cx(
+    'py-4 text-center text-xl font-bold',
+    light && 'text-white',
+    uppercase && 'uppercase'
+  );
 
   return <h1 className={classNames}>{children}</h1>;
 };

@@ -1,5 +1,6 @@
 import { ProviderId, User } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
+import { cx } from '../util/helpers/classNames.helpers';
 
 type AvatarProps = {
   user: User;
@@ -17,9 +18,10 @@ const Avatar = ({ user, large = false }: AvatarProps) => {
 
   return (
     <div
-      className={`${
+      className={cx(
+        'flex items-center justify-center rounded-full border-2 text-2xl font-bold text-white',
         large ? 'h-16 w-16 border-blue-500' : 'h-12 w-12 border-white'
-      } flex items-center justify-center rounded-full border-2 text-2xl font-bold text-white`}
+      )}
     >
       {user.photoURL ? (
         <img

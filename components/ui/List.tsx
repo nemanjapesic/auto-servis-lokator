@@ -1,11 +1,11 @@
+import { cx } from '../../util/helpers/classNames.helpers';
+
 type ListProps = {
   children: JSX.Element | JSX.Element[];
 };
 
 const List = ({ children }: ListProps) => {
-  const styles = ['bg-white', 'shadow'];
-
-  const classNames = styles.join(' ');
+  const classNames = cx('bg-white shadow');
 
   return <ul className={classNames}>{children}</ul>;
 };

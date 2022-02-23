@@ -1,4 +1,5 @@
 import { BiCheckCircle, BiError, BiErrorCircle, BiInfoCircle } from 'react-icons/bi';
+import { cx } from '../../util/helpers/classNames.helpers';
 
 type AlertProps = {
   message: string;
@@ -12,43 +13,33 @@ const icons = {
   info: <BiInfoCircle />,
 };
 
-const Alert = ({ message, type }: AlertProps) => {
-  const styles = ['flex items-center', 'my-1', 'px-4', 'py-2', 'rounded', 'shadow', 'border'];
-
-  let icon = null;
-
+const getAlertVariant = (type) => {
   switch (type) {
     case 'success':
-      styles.push('bg-green-200');
-      styles.push('text-green-700');
-      icon = icons.success;
-      break;
+      return 'bg-green-200 text-green-700';
     case 'warning':
-      styles.push('bg-orange-200');
-      styles.push('text-orange-700');
-      icon = icons.warning;
-      break;
+      return 'bg-orange-200 text-orange-700';
     case 'danger':
-      styles.push('bg-red-200');
-      styles.push('text-red-700');
-      icon = icons.danger;
-      break;
+      return 'bg-red-200 text-red-700';
     case 'info':
-      styles.push('bg-blue-200');
-      styles.push('text-blue-700');
-      icon = icons.info;
-      break;
-
+      return 'bg-blue-200 text-blue-700';
     default:
-      styles.push('bg-white');
-      styles.push('text-black');
-      break;
+      return 'bg-white text-black';
   }
+};
 
-  const classNames = styles.join(' ');
+const Alert = ({ message, type }: AlertProps) => {
+  let icon = icons[type];
+
+  const classNames = cx(
+    'my-1 flex items-center rounded border px-4 py-2 shadow',
+    getAlertVariant(type)
+  );
 
   return (
     <div className={classNames}>
+      <div className=""></div>
+
       {icon && <span className="mr-2">{icon}</span>}
       {message}
     </div>
