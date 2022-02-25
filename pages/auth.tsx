@@ -7,6 +7,7 @@ import Heading from '../components/ui/Heading';
 import Link from '../components/ui/Link';
 import Text from '../components/ui/Text';
 import { useAuth } from '../context/AuthContext';
+import { Routes } from '../util/constants/routes.constants';
 
 const Auth = () => {
   const { isLoading, currentUser, signInWithFacebook, signInWithGoogle } = useAuth();
@@ -17,7 +18,7 @@ const Auth = () => {
 
   useEffect(() => {
     if (!isLoading && currentUser) {
-      router.push('/');
+      router.push(Routes.HOME);
     }
   }, [isLoading, currentUser]);
 
@@ -71,11 +72,11 @@ const Auth = () => {
       </div>
       <Text small center>
         Prijavljivanjem potvrđujete da ste pročitali i da se slažete sa{' '}
-        <Link href="/tos" underline>
+        <Link href={Routes.TOS} underline>
           uslovima korišćenja
         </Link>{' '}
         i{' '}
-        <Link href="/privacy-policy" underline>
+        <Link href={Routes.PRIVACY_POLICY} underline>
           politikom privatnosti
         </Link>
         .

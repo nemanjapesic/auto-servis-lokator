@@ -1,4 +1,5 @@
 import { useAuth } from '../context/AuthContext';
+import { Routes } from '../util/constants/routes.constants';
 import { cx } from '../util/helpers/classNames.helpers';
 import Avatar from './Avatar';
 import Link from './ui/Link';
@@ -7,16 +8,16 @@ import ListItem from './ui/ListItem';
 import Text from './ui/Text';
 
 const defaultLinks = [
-  { text: 'Prijavi se', href: '/auth' },
-  { text: 'Preporuči auto servis', href: '/recommend' },
-  { text: 'Uslovi korišćenja', href: '/tos' },
-  { text: 'Politika privatnosti', href: '/privacy-policy' },
+  { text: 'Prijavi se', href: Routes.AUTH },
+  { text: 'Preporuči auto servis', href: Routes.RECOMMEND },
+  { text: 'Uslovi korišćenja', href: Routes.TOS },
+  { text: 'Politika privatnosti', href: Routes.PRIVACY_POLICY },
 ];
 
 const authLinks = [
-  { text: 'Moj auto', href: '/my-car' },
-  { text: 'Omiljene lokacije', href: '/favorites' },
-  { text: 'Preporuči auto servis', href: '/recommend' },
+  { text: 'Moj auto', href: Routes.MY_CAR },
+  { text: 'Omiljene lokacije', href: Routes.FAVORITES },
+  { text: 'Preporuči auto servis', href: Routes.RECOMMEND },
 ];
 
 type NavProps = {

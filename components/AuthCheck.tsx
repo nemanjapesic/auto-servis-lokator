@@ -1,4 +1,5 @@
 import { useAuth } from '../context/AuthContext';
+import { Routes } from '../util/constants/routes.constants';
 import Button from './ui/Button';
 import Link from './ui/Link';
 import Text from './ui/Text';
@@ -18,7 +19,7 @@ const AuthCheck = ({ children, fallback }: AuthCheckProps) => {
         : fallback || (
             <div className="text-center">
               <Text>Morate biti prijavljeni da biste nastavili.</Text>
-              <Link href="/auth">
+              <Link href={Routes.AUTH}>
                 <Button light uppercase>
                   Prijavi se
                 </Button>

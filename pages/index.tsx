@@ -2,6 +2,7 @@ import Button from '../components/ui/Button';
 import Heading from '../components/ui/Heading';
 import Link from '../components/ui/Link';
 import Text from '../components/ui/Text';
+import { Routes } from '../util/constants/routes.constants';
 
 const Home = () => {
   return (
@@ -22,7 +23,7 @@ const Home = () => {
           iskustva, možete preporučiti servise čijim ste uslugama i načinom poslovanja zadovoljni.
         </Text>
         <Text light>Hvala!</Text>
-        <Link href="/recommend">
+        <Link href={Routes.RECOMMEND}>
           <Button light uppercase>
             Preporuči
           </Button>

@@ -9,6 +9,7 @@ import Input from '../components/ui/Input';
 import Text from '../components/ui/Text';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
+import { Routes } from '../util/constants/routes.constants';
 import { baseRequiredValidationRules } from '../util/helpers/validation.helpers';
 
 const formFields = [
@@ -60,7 +61,7 @@ const Recommend = () => {
       });
 
       toast.success('Vaša preporuka je dodata!');
-      router.push('/');
+      router.push(Routes.HOME);
     } catch (error) {
       console.log(error);
     }

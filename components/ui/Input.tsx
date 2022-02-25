@@ -24,7 +24,7 @@ const Input = ({
   fullWidth,
 }: InputProps) => {
   const classNames = cx(
-    'peer py-2 my-1 rounded border px-4 shadow',
+    'peer my-1 rounded border px-4 py-3 shadow',
     fullWidth && 'w-full',
     error && 'border-red-500'
   );
@@ -59,7 +59,7 @@ const Input = ({
       >
         {label}
       </label>
-      <p className="text-xs leading-3 text-red-500">{error?.message}&nbsp;</p>
+      {error && <p className="text-xs leading-3 text-red-500">{error?.message}&nbsp;</p>}
     </div>
   );
 };
