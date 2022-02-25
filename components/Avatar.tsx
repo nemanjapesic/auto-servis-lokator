@@ -1,5 +1,6 @@
-import { ProviderId, User } from 'firebase/auth';
+import { ProviderId } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
+import { User } from '../typescript/user.interfaces';
 import { cx } from '../util/helpers/classNames.helpers';
 
 type AvatarProps = {
@@ -8,11 +9,11 @@ type AvatarProps = {
 };
 
 const Avatar = ({ user, large = false }: AvatarProps) => {
-  const { providerId, fbAccessToken } = useAuth();
+  const { fbAccessToken } = useAuth();
 
   let profilePictureUrl = user.photoURL;
 
-  if (providerId === ProviderId.FACEBOOK) {
+  if (user.providerId === ProviderId.FACEBOOK) {
     profilePictureUrl += `?access_token=${fbAccessToken}`;
   }
 

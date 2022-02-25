@@ -1,9 +1,11 @@
 import { BiCheckCircle, BiError, BiErrorCircle, BiInfoCircle } from 'react-icons/bi';
+import { FaTimes } from 'react-icons/fa';
 import { cx } from '../../util/helpers/classNames.helpers';
 
 type AlertProps = {
   message: string;
   type?: 'success' | 'warning' | 'danger' | 'info';
+  onClose?: () => void;
 };
 
 const icons = {
@@ -28,7 +30,7 @@ const getAlertVariant = (type) => {
   }
 };
 
-const Alert = ({ message, type }: AlertProps) => {
+const Alert = ({ message, type, onClose }: AlertProps) => {
   let icon = icons[type];
 
   const classNames = cx(
@@ -42,6 +44,9 @@ const Alert = ({ message, type }: AlertProps) => {
 
       {icon && <span className="mr-2">{icon}</span>}
       {message}
+      <span className="ml-2 cursor-pointer" onClick={onClose}>
+        <FaTimes />
+      </span>
     </div>
   );
 };

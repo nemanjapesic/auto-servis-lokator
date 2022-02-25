@@ -1,4 +1,4 @@
-import { User } from 'firebase/auth';
+import { User } from '../typescript/user.interfaces';
 import Avatar from './Avatar';
 
 type AvatarMenuIconButtonProps = {

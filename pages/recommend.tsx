@@ -2,10 +2,10 @@ import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import AuthCheck from '../components/AuthCheck';
 import Button from '../components/ui/Button';
 import Heading from '../components/ui/Heading';
 import Input from '../components/ui/Input';
-import Link from '../components/ui/Link';
 import Text from '../components/ui/Text';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
@@ -71,16 +71,7 @@ const Recommend = () => {
   return (
     <div className="mx-auto p-2">
       <Heading uppercase>Preporuči auto servis</Heading>
-      {!currentUser ? (
-        <div className="text-center">
-          <Text>Morate biti prijavljeni da biste nastavili.</Text>
-          <Link href="/auth">
-            <Button light uppercase>
-              Prijavi se
-            </Button>
-          </Link>
-        </div>
-      ) : (
+      <AuthCheck>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <Text small uppercase>
@@ -104,7 +95,7 @@ const Recommend = () => {
             Preporuči
           </Button>
         </form>
-      )}
+      </AuthCheck>
     </div>
   );
 };

@@ -30,7 +30,6 @@ const Auth = () => {
       if (error.code === 'auth/account-exists-with-different-credential') {
         setAlert({ type: 'info', message: 'Email already exists. Please Sign In with Google' });
       }
-    } finally {
       setIsAuthInProgress(false);
     }
   };
@@ -41,7 +40,6 @@ const Auth = () => {
       await signInWithGoogle();
     } catch (error) {
       console.log(error);
-    } finally {
       setIsAuthInProgress(false);
     }
   };
@@ -51,7 +49,7 @@ const Auth = () => {
   return (
     <div className="flex flex-col items-center p-2">
       <Heading uppercase>Prijavi se</Heading>
-      {alert && <Alert type={alert.type} message={alert.message} />}
+      {alert && <Alert type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
       <div>
         <Button
           fullWidth

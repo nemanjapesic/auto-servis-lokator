@@ -4,10 +4,10 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   signOut as authSignOut,
-  User,
 } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase';
+import { auth, createUser } from '../firebase';
+import { formatUser } from '../util/helpers/user.helpers';
 
 const defaultValue = {
   isLoading: null,
@@ -15,7 +15,6 @@ const defaultValue = {
   signInWithFacebook: null,
   signInWithGoogle: null,
   signOut: null,
-  providerId: null,
   fbAccessToken: null,
 };
 
@@ -29,33 +28,14 @@ const googleAuthProvider = new GoogleAuthProvider();
 
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<User>(null);
-  const [providerId, setProviderId] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [fbAccessToken, setFbAccessToken] = useState(null);
-
-  const signInWithFacebook = () =>
-    signInWithPopup(auth, facebookAuthProvider).then((result) => {
-      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      const credential = FacebookAuthProvider.credentialFromResult(result);
-      const fbAccessToken = credential.accessToken;
-
-      setFbAccessToken(fbAccessToken);
-      localStorage.setItem('fbAccessToken', fbAccessToken);
-    });
-
-  const signInWithGoogle = () => signInWithPopup(auth, googleAuthProvider);
-
-  const signOut = () =>
-    authSignOut(auth).then(() => {
-      setCurrentUser(null);
-      localStorage.removeItem('fbAccessToken');
-    });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setCurrentUser(user);
-        setProviderId(user.providerData[0].providerId);
+        const formattedUser = formatUser(user);
+        setCurrentUser(formattedUser);
       }
       setIsLoading(false);
     });
@@ -66,6 +46,47 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
+  // Auth Actions
+  const signInWithFacebook = () =>
+    signInWithPopup(auth, facebookAuthProvider).then((result) => {
+      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      const credential = FacebookAuthProvider.credentialFromResult(result);
+      const fbAccessToken = credential.accessToken;
+
+      setFbAccessToken(fbAccessToken);
+      localStorage.setItem('fbAccessToken', fbAccessToken);
+
+      handleUser(result.user);
+    });
+
+  const signInWithGoogle = () =>
+    signInWithPopup(auth, googleAuthProvider).then((result) => handleUser(result.user));
+
+  const signOut = () =>
+    authSignOut(auth).then(() => {
+      setCurrentUser(null);
+      localStorage.removeItem('fbAccessToken');
+    });
+
+  const handleUser = async (rawUser) => {
+    if (rawUser) {
+      const user = formatUser(rawUser);
+      try {
+        await createUser(user.uid, user);
+        setCurrentUser(user);
+        return user;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setCurrentUser(null);
+      setIsLoading(false);
+      return null;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -74,7 +95,6 @@ export const AuthProvider = ({ children }) => {
         signInWithFacebook,
         signInWithGoogle,
         signOut,
-        providerId,
         fbAccessToken,
       }}
     >
