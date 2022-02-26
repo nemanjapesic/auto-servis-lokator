@@ -1,7 +1,7 @@
 import { cx } from '../../util/helpers/classNames.helpers';
 
 type HeadingProps = {
-  children: string;
+  children: string | JSX.Element | (string | JSX.Element)[];
   light?: boolean;
   uppercase?: boolean;
 };

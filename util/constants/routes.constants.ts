@@ -1,6 +1,7 @@
 export enum Routes {
   HOME = '/',
   AUTH = '/auth',
+  SEARCH = '/search',
   RECOMMEND = '/recommend',
   TOS = '/tos',
   PRIVACY_POLICY = '/privacy-policy',

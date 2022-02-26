@@ -15,6 +15,16 @@ const Home = () => {
       </Heading>
       <div className="font-thin">
         <Text light>
+          <span className="font-normal italic">Auto Servis Lokator</span> je mesto na kome možete
+          pronaći najbolje auto servise u vašoj okolini i glasati za one čijim ste uslugama i
+          načinom poslovanja zadovoljni.
+        </Text>
+        <Text light>
+          Glasanjem pomažete servisima da dođu na vrh pretrage a samim tim i ostalim vozačima da
+          lakše dođu do najboljih auto servisa.
+        </Text>
+        <br />
+        <Text light>
           <span className="font-normal italic">Auto Servis Lokator</span> je trenutno u fazi
           prikupljanja informacija o najboljim i najpouzdanijim pružaocima auto usluga.
         </Text>
@@ -23,11 +33,16 @@ const Home = () => {
           iskustva, možete preporučiti servise čijim ste uslugama i načinom poslovanja zadovoljni.
         </Text>
         <Text light>Hvala!</Text>
+        <br />
         <Link href={Routes.RECOMMEND}>
           <Button light uppercase>
             Preporuči
           </Button>
         </Link>
+        <Text light>ili</Text>
+        <Text light uppercase>
+          <Link href={Routes.SEARCH}>Pretraži i glasaj za postojeće auto usluge</Link>
+        </Text>
       </div>
     </div>
   );

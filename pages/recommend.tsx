@@ -6,9 +6,12 @@ import AuthCheck from '../components/AuthCheck';
 import Button from '../components/ui/Button';
 import Heading from '../components/ui/Heading';
 import Input from '../components/ui/Input';
+import Select from '../components/ui/Select';
 import Text from '../components/ui/Text';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
+import { categories } from '../util/constants/categories.constants';
+import { municipalities } from '../util/constants/location.constants';
 import { Routes } from '../util/constants/routes.constants';
 import { baseRequiredValidationRules } from '../util/helpers/validation.helpers';
 
@@ -19,6 +22,18 @@ const formFields = [
     validationRules: baseRequiredValidationRules,
   },
   {
+    name: 'category',
+    label: 'Kategorija',
+    validationRules: { required: 'Ovo polje je obavezno' },
+    data: categories,
+  },
+  {
+    name: 'location',
+    label: 'Opština',
+    validationRules: { required: 'Ovo polje je obavezno' },
+    data: municipalities,
+  },
+  {
     name: 'address',
     label: 'Adresa',
     validationRules: baseRequiredValidationRules,
@@ -26,7 +41,13 @@ const formFields = [
   {
     name: 'phone',
     label: 'Telefon',
-    validationRules: baseRequiredValidationRules,
+    validationRules: {
+      ...baseRequiredValidationRules,
+      pattern: {
+        value: /^\d+(,\d+)*$/g,
+        message: 'Unos može sadržati samo brojeve odvojene zapetom',
+      },
+    },
   },
   {
     name: 'comment',
@@ -45,11 +66,17 @@ const Recommend = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
-  } = useForm({ defaultValues: { userEmail: currentUser?.email || '' } });
+  } = useForm();
 
-  const onSubmit = async (data) => {
-    await addRecommendation(data);
+  const onSubmit = (data) => {
+    const recommendation = {
+      ...data,
+      userEmail: currentUser.email,
+    };
+
+    addRecommendation(recommendation);
     reset();
   };
 
@@ -78,19 +105,45 @@ const Recommend = () => {
             <Text small uppercase>
               Podaci o auto servisu
             </Text>
-            {formFields.map(({ name, label, validationRules }) => (
-              <Input
-                key={name}
-                name={name}
-                register={register}
-                label={label}
-                placeholder={label}
-                multiline={name === 'comment'}
-                fullWidth
-                validationRules={validationRules}
-                error={errors[name]}
-              />
-            ))}
+            {formFields.map(({ name, label, validationRules, data }) => {
+              if (name === 'category' || name === 'location') {
+                const value = watch(name);
+
+                return (
+                  <Select
+                    value={value}
+                    key={name}
+                    name={name}
+                    placeholder={label}
+                    label={label}
+                    register={register}
+                    fullWidth
+                    validationRules={validationRules}
+                    error={errors[name]}
+                  >
+                    {data.map((item) => (
+                      <option key={item} value={item.toLowerCase()}>
+                        {item}
+                      </option>
+                    ))}
+                  </Select>
+                );
+              } else {
+                return (
+                  <Input
+                    key={name}
+                    name={name}
+                    register={register}
+                    label={label}
+                    placeholder={label}
+                    multiline={name === 'comment'}
+                    fullWidth
+                    validationRules={validationRules}
+                    error={errors[name]}
+                  />
+                );
+              }
+            })}
           </div>
           <Button type="submit" fullWidth disabled={isSubmitting}>
             Preporuči

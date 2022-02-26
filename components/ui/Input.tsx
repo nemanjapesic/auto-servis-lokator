@@ -59,7 +59,7 @@ const Input = ({
       >
         {label}
       </label>
-      {error && <p className="text-xs leading-3 text-red-500">{error?.message}&nbsp;</p>}
+      {error && <p className="text-xs leading-3 text-red-500">{error?.message}</p>}
     </div>
   );
 };

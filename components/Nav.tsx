@@ -40,8 +40,8 @@ const Nav = ({ open }: NavProps) => {
   return (
     <nav
       className={cx(
-        'absolute top-full left-0 right-0 z-10 transition duration-300',
-        open ? 'translate-y-0' : '-translate-y-full'
+        'absolute top-full left-0 right-0 z-10 transition duration-300 md:left-auto md:w-full md:max-w-xs',
+        open ? 'translate-y-0' : 'top-12 -translate-y-full'
       )}
     >
       <List>
