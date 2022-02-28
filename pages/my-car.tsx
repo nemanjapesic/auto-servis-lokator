@@ -46,13 +46,13 @@ const MyCar = () => {
   };
 
   const imgUrl = carBrand
-    ? `https://www.carlogos.org/car-logos/${carBrand.split(' ').join('-')}-logo.png`
+    ? `https://www.carlogos.org/car-logos/${carBrand.toLowerCase().split(' ').join('-')}-logo.png`
     : '/logo-2.svg';
 
   if (isLoading) return null;
 
   return (
-    <div className="mx-auto p-2">
+    <div className="mx-auto p-2 pt-10">
       <Heading uppercase>Moj auto</Heading>
       <AuthCheck>
         <div className="flex h-24 justify-center">
@@ -61,7 +61,7 @@ const MyCar = () => {
         <form onSubmit={handleSubmit}>
           <Select value={carBrand} placeholder="Moj auto" onChange={handleChange} fullWidth>
             {carBrands.map((carBrandName) => (
-              <option key={carBrandName} value={carBrandName.toLowerCase()}>
+              <option key={carBrandName} value={carBrandName}>
                 {carBrandName}
               </option>
             ))}

@@ -48,7 +48,7 @@ const Auth = () => {
   if (isLoading) return null;
 
   return (
-    <div className="flex flex-col items-center p-2">
+    <div className="flex flex-col items-center p-2 pt-10">
       <Heading uppercase>Prijavi se</Heading>
       {alert && <Alert type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
       <div>

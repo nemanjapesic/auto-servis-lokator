@@ -1,9 +1,13 @@
-const Loader = ({ show }) => {
+type LoaderProps = {
+  show: boolean;
+};
+
+const Loader = ({ show }: LoaderProps) => {
   return show ? (
     <div className="flex items-center justify-center">
       <svg
         role="status"
-        className="mr-2 h-8 w-8 animate-spin fill-blue-500 text-gray-200 dark:text-gray-400"
+        className="mr-2 h-8 w-8 animate-spin fill-blue-500 text-gray-200"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

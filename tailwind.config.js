@@ -7,6 +7,12 @@ module.exports = {
       fontFamily: {
         sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
       },
+      colors: {
+        blue: {
+          500: '#00AAFF',
+          700: '#2D54D2',
+        },
+      },
     },
   },
   plugins: [],

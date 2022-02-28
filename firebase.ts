@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { doc, getDoc, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -50,4 +50,22 @@ export const updateUser = (uid, data) => {
   const userRef = doc(db, `users/${uid}`);
 
   return updateDoc(userRef, data);
+};
+
+export const getData = async (query) => {
+  try {
+    const snapshot = await getDocs(query);
+
+    const data = snapshot.docs.map((doc) => {
+      const docData = doc.data() as any;
+      return {
+        ...docData,
+        id: doc.id,
+      };
+    });
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };

@@ -6,8 +6,8 @@ import { Routes } from '../util/constants/routes.constants';
 
 const Home = () => {
   return (
-    <div className="flex-auto bg-gradient-to-b from-blue-500 to-blue-700 p-2 text-center">
-      <div className="flex justify-center pt-6">
+    <div className="flex-auto bg-gradient-to-b from-blue-500 to-blue-700 p-2 pt-10 text-center">
+      <div className="flex justify-center">
         <img src="/logo.svg" alt="Auto Servis Lokator Logo" width="96px" height="104px" />
       </div>
       <Heading light uppercase>

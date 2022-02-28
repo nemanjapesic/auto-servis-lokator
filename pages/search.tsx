@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import AuthCheck from '../components/AuthCheck';
 import Button from '../components/ui/Button';
 import Heading from '../components/ui/Heading';
 import Select from '../components/ui/Select';
@@ -60,7 +59,7 @@ const Search = () => {
   if (isLoading) return null;
 
   return (
-    <div className="mx-auto p-2">
+    <div className="mx-auto p-2 pt-10">
       <Heading uppercase>
         Pronađite najbolje <br /> auto usluge u vašoj okolini
       </Heading>
@@ -74,7 +73,7 @@ const Search = () => {
           fullWidth
         >
           {categories.map((categoryName) => (
-            <option key={categoryName} value={categoryName.toLowerCase()}>
+            <option key={categoryName} value={categoryName}>
               {categoryName}
             </option>
           ))}
@@ -88,7 +87,7 @@ const Search = () => {
           fullWidth
         >
           {municipalities.map((municipality) => (
-            <option key={municipality} value={municipality.toLowerCase()}>
+            <option key={municipality} value={municipality}>
               {municipality}
             </option>
           ))}
@@ -102,7 +101,7 @@ const Search = () => {
           fullWidth
         >
           {carBrands.map((car) => (
-            <option key={car} value={car.toLowerCase()}>
+            <option key={car} value={car}>
               {car}
             </option>
           ))}

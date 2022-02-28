@@ -15,6 +15,7 @@ const defaultLinks = [
 ];
 
 const authLinks = [
+  { text: 'Pretraga', href: Routes.SEARCH },
   { text: 'Moj auto', href: Routes.MY_CAR },
   { text: 'Omiljene lokacije', href: Routes.FAVORITES },
   { text: 'Preporuči auto servis', href: Routes.RECOMMEND },

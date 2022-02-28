@@ -97,7 +97,7 @@ const Recommend = () => {
   if (isLoading) return null;
 
   return (
-    <div className="mx-auto p-2">
+    <div className="mx-auto p-2 pt-10">
       <Heading uppercase>Preporuči auto servis</Heading>
       <AuthCheck>
         <form onSubmit={handleSubmit(onSubmit)}>
