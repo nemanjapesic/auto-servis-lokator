@@ -42,7 +42,7 @@ export const getServerSideProps = async ({ query: params }) => {
   const data = await getData(q1);
 
   return {
-    props: { services: data },
+    props: { services: data || [] },
   };
 };
 

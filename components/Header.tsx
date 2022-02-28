@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <header className="relative">
+    <header className="fixed z-20 w-full">
       <div className="relative z-20 flex flex-initial justify-between bg-gradient-to-b from-blue-500 to-blue-700 px-4 py-2 shadow">
         <Brand />
         {currentUser ? (
