@@ -1,9 +1,13 @@
+import toast from 'react-hot-toast';
 import { FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
 import LikeButton from './LikeButton';
 import ListItem from './ui/ListItem';
 import Text from './ui/Text';
 
 const ServiceCard = ({ service, onLike, isLiked }) => {
+  const { currentUser } = useAuth();
+
   return (
     <div className="relative w-80 shadow">
       <div className="flex h-20 items-center justify-center rounded-t bg-gradient-to-b from-blue-500 to-blue-700 px-4 py-2">
@@ -35,6 +39,7 @@ const ServiceCard = ({ service, onLike, isLiked }) => {
       </ul>
       <LikeButton
         onClick={() => {
+          if (!currentUser) return toast('Morate biti prijavljeni da biste glasali.');
           onLike(service.id);
         }}
         isLiked={isLiked}
