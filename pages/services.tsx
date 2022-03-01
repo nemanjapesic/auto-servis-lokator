@@ -15,6 +15,7 @@ import {
 import debounce from 'lodash.debounce';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import ScrollToTop from '../components/ScrollToTop';
 import ServiceCard from '../components/ServiceCard';
 import Button from '../components/ui/Button';
 import Heading from '../components/ui/Heading';
@@ -156,10 +157,11 @@ const Services = ({ services: ssrServices }) => {
       <div className="mt-8 text-center">
         {!isLoading &&
           !servicesEnd &&
-          (services.length < 9 ? null : <Button onClick={getMoreServices}>Učitaj još</Button>)}
+          (services.length < LIMIT ? null : <Button onClick={getMoreServices}>Učitaj još</Button>)}
         <Loader show={isLoading} />
         {servicesEnd && <Text>Nema više rezultata.</Text>}
       </div>
+      <ScrollToTop />
     </div>
   );
 };

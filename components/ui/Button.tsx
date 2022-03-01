@@ -31,8 +31,8 @@ const Button = ({
     disabled
       ? 'cursor-not-allowed bg-gray-200 text-gray-400'
       : light
-      ? 'bg-white text-black'
-      : 'bg-gradient-to-b from-blue-500 to-blue-700 text-white'
+      ? 'bg-white text-black hover:bg-neutral-100'
+      : 'bg-gradient-to-b from-blue-500 to-blue-700 text-white hover:to-blue-600'
   );
 
   return (

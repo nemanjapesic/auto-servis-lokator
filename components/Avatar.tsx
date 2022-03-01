@@ -20,8 +20,10 @@ const Avatar = ({ user, large = false }: AvatarProps) => {
   return (
     <div
       className={cx(
-        'flex items-center justify-center rounded-full border-2 text-2xl font-bold text-white',
-        large ? 'h-16 w-16 border-blue-500' : 'h-12 w-12 border-white'
+        'flex items-center justify-center rounded-full border-4 text-2xl font-bold text-white',
+        large
+          ? 'h-16 w-16 border-blue-500 bg-blue-500 text-4xl'
+          : 'h-12 w-12 border-white border-opacity-10 hover:border-white hover:border-opacity-25'
       )}
     >
       {user.photoURL ? (
@@ -33,7 +35,7 @@ const Avatar = ({ user, large = false }: AvatarProps) => {
           height="64px"
         />
       ) : (
-        <span className={`${large ? 'text-blue-500' : 'text-white'}`}>{user.displayName[0]}</span>
+        <span className="text-white">{user.displayName[0]}</span>
       )}
     </div>
   );

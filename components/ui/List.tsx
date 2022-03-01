@@ -5,7 +5,7 @@ type ListProps = {
 };
 
 const List = ({ children }: ListProps) => {
-  const classNames = cx('bg-white shadow');
+  const classNames = cx('bg-white shadow md:rounded');
 
   return <ul className={classNames}>{children}</ul>;
 };

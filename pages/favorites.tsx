@@ -3,27 +3,36 @@ import {
   arrayUnion,
   collection,
   doc,
+  getDoc,
   increment,
+  limit,
   orderBy,
   query,
+  startAfter,
   updateDoc,
   where,
 } from 'firebase/firestore';
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useState } from 'react';
 import AuthCheck from '../components/AuthCheck';
+import ScrollToTop from '../components/ScrollToTop';
 import ServiceCard from '../components/ServiceCard';
+import Button from '../components/ui/Button';
 import Heading from '../components/ui/Heading';
+import Loader from '../components/ui/Loader';
 import Text from '../components/ui/Text';
 import { useAuth } from '../context/AuthContext';
 import { db, getData } from '../firebase';
 
+const LIMIT = 9;
 const servicesRef = collection(db, 'services');
 
 const Favorites = () => {
-  const { currentUser, isLoading } = useAuth();
+  const { currentUser, isLoading: isUserLoading } = useAuth();
 
   const [services, setServices] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [servicesEnd, setServicesEnd] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -36,7 +45,8 @@ const Favorites = () => {
       const q = query(
         servicesRef,
         where('likes', 'array-contains', currentUser.uid),
-        orderBy('likesCount', 'desc')
+        orderBy('likesCount', 'desc'),
+        limit(LIMIT)
       );
 
       const data = await getData(q);
@@ -44,6 +54,36 @@ const Favorites = () => {
       setServices(data);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const getMoreServices = async () => {
+    setIsLoading(true);
+
+    try {
+      const last = services[services.length - 1];
+      const lastRef = doc(db, `services/${last.id}`);
+      const lastVisible = await getDoc(lastRef);
+
+      const q = query(
+        servicesRef,
+        where('likes', 'array-contains', currentUser.uid),
+        orderBy('likesCount', 'desc'),
+        startAfter(lastVisible),
+        limit(LIMIT)
+      );
+
+      const newServices = await getData(q);
+
+      setServices((existingServices) => [...existingServices, ...newServices]);
+      setIsLoading(false);
+
+      if (newServices.length < LIMIT) {
+        setServicesEnd(true);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -91,7 +131,7 @@ const Favorites = () => {
 
   const isServiceLiked = (service) => service.likes?.includes(currentUser?.uid);
 
-  if (isLoading) return null;
+  if (isUserLoading) return null;
 
   return (
     <div className="mx-auto p-2 pt-10">
@@ -114,6 +154,16 @@ const Favorites = () => {
             ) : null
           )}
         </div>
+        <div className="mt-8 text-center">
+          {!isLoading &&
+            !servicesEnd &&
+            (services.length < LIMIT ? null : (
+              <Button onClick={getMoreServices}>Učitaj još</Button>
+            ))}
+          <Loader show={isLoading} />
+          {servicesEnd && <Text>Nema više rezultata.</Text>}
+        </div>
+        <ScrollToTop />
       </AuthCheck>
     </div>
   );
