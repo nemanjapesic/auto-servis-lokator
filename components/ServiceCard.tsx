@@ -5,7 +5,13 @@ import LikeButton from './LikeButton';
 import ListItem from './ui/ListItem';
 import Text from './ui/Text';
 
-const ServiceCard = ({ service, onLike, isLiked }) => {
+type ServiceCardProps = {
+  service: any;
+  onLike: (id: string) => void;
+  isLiked: boolean;
+};
+
+const ServiceCard = ({ service, onLike, isLiked }: ServiceCardProps) => {
   const { currentUser } = useAuth();
 
   return (
