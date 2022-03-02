@@ -1,19 +1,5 @@
-import {
-  arrayRemove,
-  arrayUnion,
-  collection,
-  doc,
-  getDoc,
-  increment,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
-import debounce from 'lodash.debounce';
-import { useCallback, useEffect, useState } from 'react';
+import { collection, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import AuthCheck from '../components/AuthCheck';
 import ScrollToTop from '../components/ScrollToTop';
 import ServiceCard from '../components/ServiceCard';
@@ -22,7 +8,8 @@ import Heading from '../components/ui/Heading';
 import Loader from '../components/ui/Loader';
 import Text from '../components/ui/Text';
 import { useAuth } from '../context/AuthContext';
-import { db, getData } from '../firebase';
+import { db } from '../firebase';
+import { getLastVisible, getServices } from '../services/service.services';
 
 const LIMIT = 9;
 const servicesRef = collection(db, 'services');
@@ -36,100 +23,60 @@ const Favorites = () => {
 
   useEffect(() => {
     if (currentUser) {
-      getServices();
+      fetchServices();
     }
   }, [currentUser]);
 
-  const getServices = async () => {
-    try {
-      const q = query(
-        servicesRef,
-        where('likes', 'array-contains', currentUser.uid),
-        orderBy('likesCount', 'desc'),
-        limit(LIMIT)
-      );
-
-      const data = await getData(q);
-
-      setServices(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getMoreServices = async () => {
+  const fetchServices = async () => {
     setIsLoading(true);
 
-    try {
-      const last = services[services.length - 1];
-      const lastRef = doc(db, `services/${last.id}`);
-      const lastVisible = await getDoc(lastRef);
+    const q = query(
+      servicesRef,
+      where('likes', 'array-contains', currentUser.uid),
+      orderBy('likesCount', 'desc'),
+      limit(LIMIT)
+    );
 
-      const q = query(
-        servicesRef,
-        where('likes', 'array-contains', currentUser.uid),
-        orderBy('likesCount', 'desc'),
-        startAfter(lastVisible),
-        limit(LIMIT)
-      );
+    const services = await getServices(q);
 
-      const newServices = await getData(q);
+    setIsLoading(false);
+    setServices(services);
+  };
 
-      setServices((existingServices) => [...existingServices, ...newServices]);
-      setIsLoading(false);
+  const fetchMoreServices = async () => {
+    setIsLoading(true);
 
-      if (newServices.length < LIMIT) {
-        setServicesEnd(true);
-      }
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+    const lastVisible = await getLastVisible(services);
+
+    const q = query(
+      servicesRef,
+      where('likes', 'array-contains', currentUser.uid),
+      orderBy('likesCount', 'desc'),
+      startAfter(lastVisible),
+      limit(LIMIT)
+    );
+
+    const newServices = await getServices(q);
+
+    setIsLoading(false);
+    setServices((existingServices) => [...existingServices, ...newServices]);
+
+    if (newServices.length < LIMIT) {
+      setServicesEnd(true);
     }
   };
 
-  const likeService = async (id) => {
-    let isLiked = null;
-
-    const newServices = services.map((service) => {
-      if (service.id === id) {
-        if (isServiceLiked(service)) {
-          isLiked = true;
-          return {
-            ...service,
-            likes: service.likes?.filter((like) => like !== currentUser.uid),
-            likesCount: service.likesCount - 1,
-          };
+  const handleLike = (newService) => {
+    setServices((existingServices) =>
+      existingServices.map((service) => {
+        if (newService.id === service.id) {
+          return newService;
         } else {
-          isLiked = false;
-          return {
-            ...service,
-            likes: [...(service.likes || []), currentUser.uid],
-            likesCount: service.likesCount + 1,
-          };
+          return service;
         }
-      }
-      return service;
-    });
-
-    const serviceDocRef = doc(db, 'services', id);
-
-    const updateAction = isLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid);
-    const incrementValue = isLiked ? -1 : 1;
-
-    try {
-      await updateDoc(serviceDocRef, {
-        likes: updateAction,
-        likesCount: increment(incrementValue),
-      });
-      setServices(newServices);
-    } catch (error) {
-      console.log(error);
-    }
+      })
+    );
   };
-
-  const debouncedLike = useCallback(debounce(likeService, 250), [currentUser, services]);
-
-  const isServiceLiked = (service) => service.likes?.includes(currentUser?.uid);
 
   if (isUserLoading) return null;
 
@@ -143,22 +90,15 @@ const Favorites = () => {
           </div>
         )}
         <div className="flex max-w-screen-lg flex-wrap justify-center gap-4 gap-y-6">
-          {services?.map((service) =>
-            isServiceLiked(service) ? (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                onLike={debouncedLike}
-                isLiked={isServiceLiked(service)}
-              />
-            ) : null
-          )}
+          {services?.map((service) => (
+            <ServiceCard key={service.id} service={service} onLike={handleLike} />
+          ))}
         </div>
         <div className="mt-8 text-center">
           {!isLoading &&
             !servicesEnd &&
             (services.length < LIMIT ? null : (
-              <Button onClick={getMoreServices}>Učitaj još</Button>
+              <Button onClick={fetchMoreServices}>Učitaj još</Button>
             ))}
           <Loader show={isLoading} />
           {servicesEnd && <Text>Nema više rezultata.</Text>}

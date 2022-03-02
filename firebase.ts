@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore';
+import { getDocs, getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -16,41 +16,6 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-
-// User Actions
-export const createUser = (uid, data) => {
-  const userRef = doc(db, `users/${uid}`);
-
-  return setDoc(
-    userRef,
-    {
-      uid,
-      ...data,
-    },
-    { merge: true }
-  );
-};
-
-export const getUserData = async (uid) => {
-  const userRef = doc(db, `users/${uid}`);
-
-  try {
-    const userSnap = await getDoc(userRef);
-
-    if (userSnap.exists()) {
-      const data = userSnap.data();
-      return data;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const updateUser = (uid, data) => {
-  const userRef = doc(db, `users/${uid}`);
-
-  return updateDoc(userRef, data);
-};
 
 export const getData = async (query) => {
   try {

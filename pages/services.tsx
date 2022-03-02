@@ -1,20 +1,6 @@
-import {
-  arrayRemove,
-  arrayUnion,
-  collection,
-  doc,
-  getDoc,
-  increment,
-  limit,
-  orderBy,
-  query,
-  startAfter,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
-import debounce from 'lodash.debounce';
+import { collection, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import ScrollToTop from '../components/ScrollToTop';
 import ServiceCard from '../components/ServiceCard';
 import Button from '../components/ui/Button';
@@ -22,8 +8,8 @@ import Heading from '../components/ui/Heading';
 import Link from '../components/ui/Link';
 import Loader from '../components/ui/Loader';
 import Text from '../components/ui/Text';
-import { useAuth } from '../context/AuthContext';
 import { db, getData } from '../firebase';
+import { getLastVisible, getServices } from '../services/service.services';
 import { Routes } from '../util/constants/routes.constants';
 
 const LIMIT = 9;
@@ -48,88 +34,47 @@ export const getServerSideProps = async ({ query: params }) => {
 };
 
 const Services = ({ services: ssrServices }) => {
-  const { currentUser } = useAuth();
-
   const [services, setServices] = useState(ssrServices);
   const [isLoading, setIsLoading] = useState(false);
   const [servicesEnd, setServicesEnd] = useState(false);
 
   const router = useRouter();
 
-  const getMoreServices = async () => {
+  const fetchMoreServices = async () => {
     setIsLoading(true);
 
-    try {
-      const last = services[services.length - 1];
-      const lastRef = doc(db, `services/${last.id}`);
-      const lastVisible = await getDoc(lastRef);
+    const lastVisible = await getLastVisible(services);
 
-      const q = query(
-        servicesRef,
-        where('categories', 'array-contains', router.query.category),
-        where('location', '==', router.query.location),
-        orderBy('likesCount', 'desc'),
-        startAfter(lastVisible),
-        limit(LIMIT)
-      );
+    const q = query(
+      servicesRef,
+      where('categories', 'array-contains', router.query.category),
+      where('location', '==', router.query.location),
+      orderBy('likesCount', 'desc'),
+      startAfter(lastVisible),
+      limit(LIMIT)
+    );
 
-      const newServices = await getData(q);
+    const newServices = await getServices(q);
 
-      setServices((existingServices) => [...existingServices, ...newServices]);
-      setIsLoading(false);
+    setIsLoading(false);
+    setServices((existingServices) => [...existingServices, ...newServices]);
 
-      if (newServices.length < LIMIT) {
-        setServicesEnd(true);
-      }
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+    if (newServices.length < LIMIT) {
+      setServicesEnd(true);
     }
   };
 
-  const likeService = async (id) => {
-    let isLiked = null;
-
-    const newServices = services.map((service) => {
-      if (service.id === id) {
-        if (isServiceLiked(service)) {
-          isLiked = true;
-          return {
-            ...service,
-            likes: service.likes?.filter((like) => like !== currentUser.uid),
-            likesCount: service.likesCount - 1,
-          };
+  const handleLike = (newService) => {
+    setServices((existingServices) =>
+      existingServices.map((service) => {
+        if (newService.id === service.id) {
+          return newService;
         } else {
-          isLiked = false;
-          return {
-            ...service,
-            likes: [...(service.likes || []), currentUser.uid],
-            likesCount: service.likesCount + 1,
-          };
+          return service;
         }
-      }
-      return service;
-    });
-
-    const serviceDocRef = doc(db, 'services', id);
-
-    const updateAction = isLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid);
-    const incrementValue = isLiked ? -1 : 1;
-
-    try {
-      await updateDoc(serviceDocRef, {
-        likes: updateAction,
-        likesCount: increment(incrementValue),
-      });
-      setServices(newServices);
-    } catch (error) {
-      console.log(error);
-    }
+      })
+    );
   };
-
-  const debouncedLike = useCallback(debounce(likeService, 250), [currentUser, services]);
-
-  const isServiceLiked = (service) => service.likes?.includes(currentUser?.uid);
 
   return (
     <div className="mx-auto p-2 pt-10">
@@ -146,18 +91,15 @@ const Services = ({ services: ssrServices }) => {
       )}
       <div className="flex max-w-screen-lg flex-wrap justify-center gap-4 gap-y-6">
         {services?.map((service) => (
-          <ServiceCard
-            key={service.id}
-            service={service}
-            onLike={debouncedLike}
-            isLiked={isServiceLiked(service)}
-          />
+          <ServiceCard key={service.id} service={service} onLike={handleLike} />
         ))}
       </div>
       <div className="mt-8 text-center">
         {!isLoading &&
           !servicesEnd &&
-          (services.length < LIMIT ? null : <Button onClick={getMoreServices}>Učitaj još</Button>)}
+          (services.length < LIMIT ? null : (
+            <Button onClick={fetchMoreServices}>Učitaj još</Button>
+          ))}
         <Loader show={isLoading} />
         {servicesEnd && <Text>Nema više rezultata.</Text>}
       </div>

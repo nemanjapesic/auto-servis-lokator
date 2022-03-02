@@ -6,7 +6,7 @@ import Heading from '../components/ui/Heading';
 import Select from '../components/ui/Select';
 import Text from '../components/ui/Text';
 import { useAuth } from '../context/AuthContext';
-import { getUserData, updateUser } from '../firebase';
+import { getUserData, updateUser } from '../services/user.services';
 import { carBrands } from '../util/constants/carBrands.constants';
 
 const MyCar = () => {

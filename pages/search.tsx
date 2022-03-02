@@ -5,11 +5,11 @@ import Button from '../components/ui/Button';
 import Heading from '../components/ui/Heading';
 import Select from '../components/ui/Select';
 import { useAuth } from '../context/AuthContext';
-import { getUserData } from '../firebase';
 import { carBrands } from '../util/constants/carBrands.constants';
 import { municipalities } from '../util/constants/location.constants';
 import { categories } from '../util/constants/categories.constants';
 import { Routes } from '../util/constants/routes.constants';
+import { getUserData } from '../services/user.services';
 
 const Search = () => {
   const { currentUser, isLoading } = useAuth();

@@ -1,18 +1,62 @@
+import { arrayRemove, arrayUnion, doc, increment, updateDoc } from 'firebase/firestore';
+import debounce from 'lodash.debounce';
+import { useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { FaMapMarkerAlt, FaPhoneAlt } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
 import LikeButton from './LikeButton';
-import ListItem from './ui/ListItem';
 import Text from './ui/Text';
 
 type ServiceCardProps = {
   service: any;
-  onLike: (id: string) => void;
-  isLiked: boolean;
+  onLike: (service: any) => void;
 };
 
-const ServiceCard = ({ service, onLike, isLiked }: ServiceCardProps) => {
+const ServiceCard = ({ service, onLike }: ServiceCardProps) => {
   const { currentUser } = useAuth();
+
+  const isServiceLiked = (service) => service.likes?.includes(currentUser?.uid);
+
+  const likeService = async () => {
+    if (!currentUser) return toast('Morate biti prijavljeni da biste glasali.');
+
+    let isLiked = null;
+    let newService = null;
+
+    if (isServiceLiked(service)) {
+      isLiked = true;
+      newService = {
+        ...service,
+        likes: service.likes?.filter((like) => like !== currentUser.uid),
+        likesCount: service.likesCount - 1,
+      };
+    } else {
+      isLiked = false;
+      newService = {
+        ...service,
+        likes: [...(service.likes || []), currentUser.uid],
+        likesCount: service.likesCount + 1,
+      };
+    }
+
+    const serviceDocRef = doc(db, 'services', service.id);
+
+    const updateAction = isLiked ? arrayRemove(currentUser.uid) : arrayUnion(currentUser.uid);
+    const incrementValue = isLiked ? -1 : 1;
+
+    try {
+      await updateDoc(serviceDocRef, {
+        likes: updateAction,
+        likesCount: increment(incrementValue),
+      });
+      onLike(newService);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const debouncedLike = useCallback(debounce(likeService, 250), [currentUser, service]);
 
   return (
     <div className="relative w-80 shadow">
@@ -22,7 +66,7 @@ const ServiceCard = ({ service, onLike, isLiked }: ServiceCardProps) => {
         </Text>
       </div>
       <ul>
-        <ListItem>
+        <li className="border-b px-4 py-2 last:border-b-0">
           <a href={service.mapUrl} target="_blank" rel="noopener noreferrer">
             <span className="inline-flex w-full items-center truncate overflow-ellipsis">
               <span className="mr-2 text-blue-500">
@@ -31,8 +75,8 @@ const ServiceCard = ({ service, onLike, isLiked }: ServiceCardProps) => {
               {service.address.split(',')[0]}
             </span>
           </a>
-        </ListItem>
-        <ListItem key={service.phone}>
+        </li>
+        <li className="border-b px-4 py-2 last:border-b-0" key={service.phone}>
           <a href={`tel:${service.phone}`}>
             <span className="inline-flex items-center">
               <span className="mr-2 text-blue-500">
@@ -41,14 +85,11 @@ const ServiceCard = ({ service, onLike, isLiked }: ServiceCardProps) => {
               {service.phone}
             </span>
           </a>
-        </ListItem>
+        </li>
       </ul>
       <LikeButton
-        onClick={() => {
-          if (!currentUser) return toast('Morate biti prijavljeni da biste glasali.');
-          onLike(service.id);
-        }}
-        isLiked={isLiked}
+        onClick={debouncedLike}
+        isLiked={isServiceLiked(service)}
         likesCount={service.likesCount}
       />
       <div className="h-4 rounded-b  bg-gradient-to-b from-blue-500 to-blue-700"></div>

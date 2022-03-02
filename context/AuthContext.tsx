@@ -6,7 +6,8 @@ import {
   signOut as authSignOut,
 } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { auth, createUser } from '../firebase';
+import { auth } from '../firebase';
+import { createUser } from '../services/user.services';
 import { formatUser } from '../util/helpers/user.helpers';
 
 const defaultValue = {
