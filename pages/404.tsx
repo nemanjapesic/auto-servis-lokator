@@ -4,10 +4,10 @@ import { Routes } from '../util/constants/routes.constants';
 
 const NotFound = () => {
   return (
-    <div className="text-center">
-      <Heading>404 - Page Not Found</Heading>
+    <div className="mx-auto p-2 pt-10 text-center">
+      <Heading uppercase>404 - Stranica nije pronađena</Heading>
       <Link href={Routes.HOME} underline>
-        Go to Home
+        Nazad na početnu
       </Link>
     </div>
   );

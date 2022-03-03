@@ -9,9 +9,8 @@ import Text from './ui/Text';
 
 const defaultLinks = [
   { text: 'Prijavi se', href: Routes.AUTH },
+  { text: 'Pretraga', href: Routes.SEARCH },
   { text: 'Preporuči auto servis', href: Routes.RECOMMEND },
-  { text: 'Uslovi korišćenja', href: Routes.TOS },
-  { text: 'Politika privatnosti', href: Routes.PRIVACY_POLICY },
 ];
 
 const authLinks = [
