@@ -61,14 +61,17 @@ const Nav = ({ open }: NavProps) => {
           )}
           {links.map((link) => (
             <ListItem key={link.text}>
-              <Link href={link.href} fullWidth>
+              <Link href={link.href} fullWidth padded>
                 {link.text}
               </Link>
             </ListItem>
           ))}
           {currentUser && (
             <ListItem>
-              <span className="inline-block w-full cursor-pointer" onClick={handleSignOut}>
+              <span
+                className="inline-block w-full cursor-pointer px-4 py-2"
+                onClick={handleSignOut}
+              >
                 Odjavi se
               </span>
             </ListItem>

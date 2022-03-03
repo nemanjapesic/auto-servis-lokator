@@ -6,10 +6,16 @@ type LinkProps = {
   href: string;
   fullWidth?: boolean;
   underline?: boolean;
+  padded?: boolean;
 };
 
-const Link = ({ children, href, fullWidth, underline }: LinkProps) => {
-  const classNames = cx('inline-block', fullWidth && 'w-full', underline && 'underline');
+const Link = ({ children, href, fullWidth, underline, padded }: LinkProps) => {
+  const classNames = cx(
+    'inline-block',
+    fullWidth && 'w-full',
+    underline && 'underline',
+    padded && 'px-4 py-2'
+  );
 
   return (
     <NextLink href={href}>
